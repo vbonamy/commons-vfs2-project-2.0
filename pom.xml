@@ -383,9 +383,9 @@
 
   <distributionManagement>
     <repository>
-      <id>apache.releases.https</id>
-      <name>Apache Release Distribution Repository</name>
-      <url>https://repository.apache.org/service/local/staging/deploy/maven2</url>
+      <id>esup</id>
+      <name>esup 3rd party Distribution Repository</name>
+      <url>https://mvn.esup-portail.org/content/repositories/thirdparty</url>
     </repository>
     <snapshotRepository>
       <id>apache.snapshots.https</id>
