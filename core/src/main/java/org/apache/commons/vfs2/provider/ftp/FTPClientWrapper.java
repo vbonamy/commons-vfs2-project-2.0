@@ -130,9 +130,15 @@ class FTPClientWrapper implements FtpClient
     private FTPFile[] listFilesInDirectory(String relPath) throws IOException
     {
         FTPFile[] files;
-
+				// escape Space with backslach on unix like ftp
+				String listPath = relPath;
+			  String strSysType = getFtpClient().getSystemType();
+				if ( listPath != null && strSysType.contains(FTPClientConfig.SYST_UNIX) ) {
+					if ( listPath.contains(" ") )
+						listPath = listPath.replaceAll(" ", "\\\\ ");
+				}
         // VFS-307: no check if we can simply list the files, this might fail if there are spaces in the path
-        files = getFtpClient().listFiles(relPath);
+        files = getFtpClient().listFiles(listPath);
         if (FTPReply.isPositiveCompletion(getFtpClient().getReplyCode()))
         {
             return files;
@@ -145,7 +151,7 @@ class FTPClientWrapper implements FtpClient
         if (relPath != null)
         {
             workingDirectory = getFtpClient().printWorkingDirectory();
-            if (!getFtpClient().changeWorkingDirectory(relPath))
+            if (!getFtpClient().changeWorkingDirectory(listPath))
             {
                 return null;
             }
