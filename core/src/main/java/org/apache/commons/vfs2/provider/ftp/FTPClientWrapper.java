@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPClientConfig;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.vfs2.FileSystemException;
@@ -28,6 +29,7 @@ import org.apache.commons.vfs2.FileSystemOptions;
 import org.apache.commons.vfs2.UserAuthenticationData;
 import org.apache.commons.vfs2.provider.GenericFileName;
 import org.apache.commons.vfs2.util.UserAuthenticatorUtils;
+
 
 /**
  * A wrapper to the FTPClient to allow automatic reconnect on connection loss.<br />
@@ -130,13 +132,13 @@ class FTPClientWrapper implements FtpClient
     private FTPFile[] listFilesInDirectory(String relPath) throws IOException
     {
         FTPFile[] files;
-				// escape Space with backslach on unix like ftp
-				String listPath = relPath;
-			  String strSysType = getFtpClient().getSystemType();
-				if ( listPath != null && strSysType.contains(FTPClientConfig.SYST_UNIX) ) {
-					if ( listPath.contains(" ") )
-						listPath = listPath.replaceAll(" ", "\\\\ ");
-				}
+	// Patch ESUP ofranco : escape Space with backslach on unix like ftp
+	String listPath = relPath;
+	String strSysType = getFtpClient().getSystemType();
+	if ( listPath != null && strSysType.contains(FTPClientConfig.SYST_UNIX) ) {
+	    if ( listPath.contains(" ") )
+		listPath = listPath.replaceAll(" ", "\\\\ ");
+	}
         // VFS-307: no check if we can simply list the files, this might fail if there are spaces in the path
         files = getFtpClient().listFiles(listPath);
         if (FTPReply.isPositiveCompletion(getFtpClient().getReplyCode()))

@@ -204,11 +204,15 @@ public final class FtpClientFactory
 
             client.configure(config);
         }
-
-				String controlEncoding = FtpFileSystemConfigBuilder.getInstance().getControlEncoding(fileSystemOptions);
-				if (controlEncoding != null)
-				{
-						client.setControlEncoding(controlEncoding);
-				}
+	
+	/* patch ESUP ofranco : 
+	   move setControlEncoding to configureClient() otherwise control encoding is never applyed 
+	   ( must be set before FtpClient.connect() )
+	*/
+	String controlEncoding = FtpFileSystemConfigBuilder.getInstance().getControlEncoding(fileSystemOptions);
+	if (controlEncoding != null)
+	    {
+		client.setControlEncoding(controlEncoding);
+	    }
     }
 }
