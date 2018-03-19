@@ -196,6 +196,23 @@ public final class SftpFileSystemConfigBuilder extends FileSystemConfigBuilder
         return (File[]) getParam(opts, "identities");
     }
 
+
+    /**
+     * configure the host key checking to use.<br>
+     * valid arguments are only yes, no and ask.<br>
+     * See the jsch documentation for details.
+     *
+     * @param opts The FileSystem options.
+     * @param keyExchangeAlgoritm - key excahnge Algoritm - possible .
+     * "diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1,diffie-hellman-group1-sha1" etc..
+     * @throws FileSystemException if an error occurs.
+     */
+    public void setKeyExchangeAlgorithm(FileSystemOptions opts, String keyExchangeAlgoritm) throws FileSystemException
+    {
+       setParam(opts, "kex", keyExchangeAlgoritm);
+    }
+    
+
     /**
      * configure the host key checking to use.<br>
      * valid arguments are only yes, no and ask.<br>
